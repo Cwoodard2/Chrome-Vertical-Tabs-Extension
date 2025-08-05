@@ -4,8 +4,8 @@ export async function grabTabs() {
 
   const tabList = tabs
     .map((currentTab) => {
-      console.log("active");
       return `<li style=${currentTab.active && "background-color:grey;"} id=${currentTab.id} class="tab">
+                <img src=${currentTab.favIconUrl} style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p> 
                 <button id=${currentTab.id + "button"} >X</button>
             </li>`;

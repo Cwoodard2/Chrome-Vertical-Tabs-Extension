@@ -1,17 +1,31 @@
 {
-  "name": "Hello Extensions",
+  "name": "Vertical Tabs",
   "description": "Base Level Extension",
   "version": "1.0",
   "manifest_version": 3,
   "permissions": [
     "sidePanel",
-    "tabs"
+    "tabs",
+    "activeTab"
   ],
+  "background": {
+    "service_worker": "CommandsServiceWorker.js",
+    "type": "module"
+  },
   "host_permissions": [
     "http://*/*",
     "https://*/*"
   ],
   "side_panel": {
     "default_path": "tabs.html"
+  },
+  "commands": {
+    "open-panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+O",
+        "mac": "Command+Shift+O"
+      },
+      "description": "Open vertical tab side panel"
+    }
   }
 }
