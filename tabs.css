@@ -1,10 +1,19 @@
 li {
-    padding: 10px;
-    box-shadow: 2px 2px 2px 2px black;
+    padding: 5px;
+    box-shadow: 0px 0px 2px 2px black;
+    border-radius: 6px;
+}
+
+.tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 ul {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+    list-style-type: none;
+    padding-left: 0;
 }
