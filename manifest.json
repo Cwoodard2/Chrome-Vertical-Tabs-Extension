@@ -13,8 +13,5 @@
   ],
   "side_panel": {
     "default_path": "tabs.html"
-  },
-  "background": {
-    "service_worker": "TabManagerServiceWorker.js"
   }
 }
