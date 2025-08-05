@@ -12,6 +12,9 @@
     "https://*/*"
   ],
   "side_panel": {
-    "default_path": "hello.html"
+    "default_path": "tabs.html"
+  },
+  "background": {
+    "service_worker": "TabManagerServiceWorker.js"
   }
 }
