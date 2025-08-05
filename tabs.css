@@ -1,0 +1,10 @@
+li {
+    padding: 10px;
+    box-shadow: 2px 2px 2px 2px black;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
