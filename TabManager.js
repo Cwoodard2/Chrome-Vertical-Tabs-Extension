@@ -4,10 +4,12 @@ export async function grabTabs() {
 
   const tabList = tabs
     .map((currentTab) => {
-      return `<li style=${currentTab.active && "background-color:grey;"} id=${currentTab.id} class="tab">
+      return `<li style=${currentTab.active && "background-color:grey;"} id=${currentTab.id} class=${"tab"}>
                 <img src=${currentTab.favIconUrl} style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p> 
-                <button id=${currentTab.id + "button"} >X</button>
+                <button id=${currentTab.id + "up-button"}>up</button>
+                <button id=${currentTab.id + "down-button"}>Down</button>
+                <button id=${currentTab.id + "close-button"} >X</button>
             </li>`;
     })
     .join("");
@@ -18,11 +20,25 @@ export async function grabTabs() {
   document.getElementById("tabList").innerHTML = tabList;
 
   tabs.forEach(element => {
-    document.getElementById(element.id).addEventListener("click", () => {
-        chrome.tabs.update(element.id, {"active": true});
+    // getTabGroup(element.groupId);
+    const currentElement = document.getElementById(element.id);
+    currentElement.addEventListener("click", () => {
+        chrome.tabs.update(element.id, {"active": true}, () => {
+          console.log("Completed Update");
+        });
     })
 
-    document.getElementById(element.id + "button").addEventListener("click", () => {
+    //add handling for if tab is first in list
+    document.getElementById(element.id + "up-button").addEventListener("click", () => {
+        chrome.tabs.move(element.id, {"index": element.index-1});
+    })
+    
+    //Add handling for if tab is last in list
+    document.getElementById(element.id + "down-button").addEventListener("click", () => {
+        chrome.tabs.move(element.id, {"index": element.index+1});
+    })
+
+    document.getElementById(element.id + "close-button").addEventListener("click", () => {
       chrome.tabs.remove(element.id, () => {
         console.log("tab removed");
       });
@@ -30,10 +46,17 @@ export async function grabTabs() {
   });
 }
 
-grabTabs();
+// function getTabGroup() {
+//   chrome.tabGroups.query({});
+//   console.log("group");
+// }
 
-chrome.tabs.onUpdated.addListener(() => {
-  console.log("noticed update");
-});
+grabTabs();
+// getTabGroup();
+
+// chrome.tabs.onUpdated.addListener((tab) => {
+//   console.log("noticed update");
+//   console.log(tab);
+// });
 chrome.tabs.onRemoved.addListener(grabTabs);
 chrome.tabs.onMoved.addListener(grabTabs);
