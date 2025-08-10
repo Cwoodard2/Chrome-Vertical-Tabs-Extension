@@ -4,7 +4,7 @@ export async function grabTabs() {
 
   const tabList = tabs
     .map((currentTab) => {
-      return `<li style=${currentTab.active && "background-color:grey;"} id=${currentTab.id} class=${"tab"}>
+      return `<li draggable="true" style=${currentTab.active && "background-color:grey;"} id=${currentTab.id} class="tab">
                 <img src=${currentTab.favIconUrl} style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p> 
                 <button id=${currentTab.id + "up-button"}>up</button>
@@ -14,8 +14,6 @@ export async function grabTabs() {
     })
     .join("");
 
-
-  // console.log(tabList);
 
   document.getElementById("tabList").innerHTML = tabList;
 
