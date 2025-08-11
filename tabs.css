@@ -8,6 +8,7 @@ li {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 ul {
@@ -20,4 +21,9 @@ ul {
 
 .active-tab {
     background-color: grey;
+}
+
+.grey {
+    border-left: 5px solid;
+    border-left-color: grey;
 }

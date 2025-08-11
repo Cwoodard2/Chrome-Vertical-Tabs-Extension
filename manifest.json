@@ -6,6 +6,7 @@
   "permissions": [
     "sidePanel",
     "tabs",
+    "tabGroups",
     "activeTab"
   ],
   "background": {
