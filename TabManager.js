@@ -1,36 +1,35 @@
+//TODO: need a better global updating system for tabs so that I am not rerendering the whole list
+
 async function getTabGroups() {
   const tabGroups = await chrome.tabGroups.query({});
   console.log(tabGroups);
   let tabsInGroups = [];
   let finalGroups;
   tabGroups.forEach(async (element, index) => {
-    const title = element.title.replaceAll(' ', '');
+    const title = element.title.replaceAll(" ", "");
     const group = await chrome.tabs.query({ groupId: element.id });
-    console.log(group);
     let groupName = title + "-group";
-    console.log(groupName);
-    finalGroups = `<li class="tab-group" id=${
-      groupName
-    }>${title}<ul id=${
-      title
-    } class="">${buildTabs(group)}</ul></li>`;
+    finalGroups = `<li class="tab-group" id=${title}><button id=${groupName}>${title}</button><ul id=${title} class="">${buildTabs(
+      group
+    )}</ul></li>`;
 
     document
       .getElementById("tab-group-list")
       .insertAdjacentHTML("beforeend", finalGroups);
+
+    document.getElementById(title).classList.add(element.color);
 
     addGroupListeners(group, title);
   });
 }
 
 function addGroupListeners(group, element) {
-  document
-    .getElementById(element + "-group")
-    .addEventListener("click", () => {
-      const tabGroup = document.getElementById(element);
-      console.log(tabGroup.classList.contains("hide-group"));
-      tabGroup.classList.contains("hide-group") ? tabGroup.classList.remove("hide-group") : tabGroup.classList.add("hide-group");
-    });
+  document.getElementById(element + "-group").addEventListener("click", () => {
+    const tabGroup = document.getElementById(element);
+    console.log(tabGroup.classList.contains("hide-group"));
+    tabGroup.classList.toggle("hide-group");
+    // tabGroup.classList.contains("hide-group") ? tabGroup.classList.remove("hide-group") : tabGroup.classList.add("hide-group");
+  });
 
   addListeners(group);
 }
@@ -38,18 +37,16 @@ function addGroupListeners(group, element) {
 function buildTabs(tabs) {
   const tabList = tabs
     .map((currentTab) => {
-      return `<li draggable="true" style=${
-        currentTab.active && "background-color:grey;"
-      } id=${currentTab.id} class="tab">
+      return `<li draggable="true" id=${currentTab.id} class="tab">
       <div class="tab-content">
                 <img src=${
                   currentTab.favIconUrl
                 } style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p>
                 </div>
-                <div>
+                <div class="button-div">
                 <button id=${currentTab.id + "close-button"} >X</button>
-                </div> 
+                </div>
             </li>`;
     })
     .join("");
@@ -59,16 +56,12 @@ function buildTabs(tabs) {
 async function addListeners(tabs) {
   tabs.forEach(async (element) => {
     const currentElement = document.getElementById(element.id);
-    console.log(element.groupId);
-    if (element.groupId != -1) {
-      const groupColor = await getTabGroup(element.groupId);
-      currentElement.classList.add(groupColor);
-    }
-    currentElement.addEventListener("click", () => {
-      chrome.tabs.update(element.id, { active: true }, () => {
-        console.log("Hey we updated!");
-        grabTabs();
-      });
+    currentElement.addEventListener("click", async () => {
+      const currentTab = await chrome.tabs.query({ active: true });
+      const tabRemoveActiveState = document.getElementById(currentTab[0].id);
+      tabRemoveActiveState.classList.remove("active-tab");
+      document.getElementById(element.id).classList.add("active-tab");
+      await chrome.tabs.update(element.id, { active: true });
     });
 
     currentElement.addEventListener("dragstart", () => {
@@ -96,12 +89,15 @@ async function addListeners(tabs) {
           console.log("tab removed");
         });
       });
+    const currentTab = await chrome.tabs.query({ active: true });
+    const tabRemoveActiveState = document.getElementById(currentTab[0].id);
+    tabRemoveActiveState.classList.add("active-tab");
   });
 }
 
 export async function grabTabs() {
   //change to get all tab groups first
-  getTabGroups();
+  // getTabGroups();
   const tabs = await chrome.tabs.query({
     groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
   });
@@ -110,7 +106,7 @@ export async function grabTabs() {
   //then get all tabs that aren't in a group
   const tabList = buildTabs(tabs);
 
-  document.getElementById("tab-list").insertAdjacentHTML("beforeend", tabList);
+  document.getElementById("tab-list").innerHTML = tabList;
 
   addListeners(tabs);
   // addListeners();
@@ -128,13 +124,12 @@ async function getTabGroup(elementId) {
 
 grabTabs();
 getTabGroups();
-// getTabGroup();
 
-chrome.tabs.onUpdated.addListener((tab) => {
-  console.log("noticed update");
-  console.log(tab);
-  grabTabs();
-});
+// chrome.tabs.onUpdated.addListener((tab) => {
+//   console.log("noticed update");
+//   console.log(tab);
+//   grabTabs();
+// });
 chrome.tabs.onCreated.addListener(grabTabs);
 chrome.tabs.onRemoved.addListener(grabTabs);
 chrome.tabs.onMoved.addListener(grabTabs);
