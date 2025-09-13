@@ -38,18 +38,17 @@ function buildTabs(tabs) {
   const tabList = tabs
     .map((currentTab) => {
       const dropzoneId = currentTab.id + "dropzone";
-      return `<li draggable="true" id=${currentTab.id} class="tab">
+      return `<li><div id=${dropzoneId}>Dropzone</div><div draggable="true" id=${currentTab.id} class="tab">
       <div class="tab-content">
                 <img src=${
                   currentTab.favIconUrl
                 } style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p>
                 </div>
-                <div id=${dropzoneId}>Dropzone</div>
                 <div class="button-div">
                 <button id=${currentTab.id + "close-button"} >X</button>
                 </div>
-            </li>`;
+            </div></li>`;
     })
     .join("");
   return tabList;
@@ -58,6 +57,8 @@ function buildTabs(tabs) {
 async function addListeners(tabs) {
   tabs.forEach(async (element) => {
     const currentElement = document.getElementById(element.id);
+    const tabDropzone = document.getElementById(element.id + "dropzone");
+
     currentElement.addEventListener("click", async () => {
       const currentTab = await chrome.tabs.query({ active: true });
       const tabRemoveActiveState = document.getElementById(currentTab[0].id);
@@ -67,24 +68,55 @@ async function addListeners(tabs) {
     });
 
     currentElement.addEventListener("dragstart", () => {
+      currentElement.classList.add("dragging");
       console.log("starting drag");
     });
 
-    document.getElementById(element.id + "dropzone").addEventListener("dragover", (e) => {
-      e.preventDefault();
-    })
+    currentElement.addEventListener("dragend", () => {
+      currentElement.classList.remove("dragging");
+      console.log("ending drag");
+    });
 
-    document.getElementById(element.id + "dropzone").addEventListener("dragenter", (e, element) => {
-      e.preventDefault();
-      console.log(e);
-      console.log("entered dropzone");
+  
+      tabDropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        tabDropzone.classList.add("over"); //switchto event.target
+      });
 
-    })
 
-    currentElement.addEventListener("drop", (e) => {
-      e.preventDefault();
+          tabDropzone.addEventListener("dragenter", (e, element) => {
+        e.preventDefault();
+        console.log(element);
+        tabDropzone.classList.add("over"); //switchto event.target
+        console.log(e);
+        console.log("entered dropzone");
+      });
+
+      tabDropzone.addEventListener("dragleave", (event) => {
+        event.preventDefault();
+        console.log("left dropzone");
+        tabDropzone.classList.remove("over"); //switchto event.target
+      });
+
+    tabDropzone.addEventListener("drop", async (event) => {
+      event.preventDefault();
       console.log("dropped");
-    })
+      const dropElementId = parseInt(event.target.id.replace("dropzone", ""));
+      try {
+        const elementToSwap = document.querySelector(".dragging");
+      const tabInformation = await chrome.tabs.get(parseInt(elementToSwap.id));
+      const dropzoneTabInfo = await chrome.tabs.get(parseInt(event.target.id.replace("dropzone", "")));
+      console.log("Moving: " + tabInformation.id + " To: " + dropzoneTabInfo.index);
+      console.log("Moving: " + dropElementId + " To: " + tabInformation.id);
+      await chrome.tabs.move(tabInformation.id, {index: dropzoneTabInfo.index});
+      // await chrome.tabs.move(dropElementId, {index: tabInformation.id});
+      elementToSwap.classList.remove("dragging");
+      tabDropzone.classList.remove("over");
+      console.log("dropped");
+      } catch (err) {
+        console.log(err);
+      }
+    });
 
     document
       .getElementById(element.id + "close-button")
@@ -134,6 +166,12 @@ chrome.tabs.onUpdated.addListener((tab) => {
   console.log(tab);
   grabTabs();
 });
-chrome.tabs.onCreated.addListener(() => {grabTabs();});
-chrome.tabs.onRemoved.addListener(() => {grabTabs();});
-chrome.tabs.onMoved.addListener(() => {grabTabs();});
+chrome.tabs.onCreated.addListener(() => {
+  grabTabs();
+});
+chrome.tabs.onRemoved.addListener(() => {
+  grabTabs();
+});
+chrome.tabs.onMoved.addListener(() => {
+  grabTabs();
+});

@@ -56,12 +56,13 @@ display: flex;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 ul {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     list-style-type: none;
     padding-left: 0;
 }
