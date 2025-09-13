@@ -23,9 +23,9 @@ async function getTabGroups() {
   });
 }
 
-function addGroupListeners(group, element) {
-  document.getElementById(element + "-group").addEventListener("click", () => {
-    const tabGroup = document.getElementById(element);
+function addGroupListeners(group, title) {
+  document.getElementById(title + "-group").addEventListener("click", () => {
+    const tabGroup = document.getElementById(title);
     console.log(tabGroup.classList.contains("hide-group"));
     tabGroup.classList.toggle("hide-group");
     // tabGroup.classList.contains("hide-group") ? tabGroup.classList.remove("hide-group") : tabGroup.classList.add("hide-group");
@@ -37,6 +37,7 @@ function addGroupListeners(group, element) {
 function buildTabs(tabs) {
   const tabList = tabs
     .map((currentTab) => {
+      const dropzoneId = currentTab.id + "dropzone";
       return `<li draggable="true" id=${currentTab.id} class="tab">
       <div class="tab-content">
                 <img src=${
@@ -44,6 +45,7 @@ function buildTabs(tabs) {
                 } style="width:24px;height:24px;"/>
                 <p>${currentTab.title}</p>
                 </div>
+                <div id=${dropzoneId}>Dropzone</div>
                 <div class="button-div">
                 <button id=${currentTab.id + "close-button"} >X</button>
                 </div>
@@ -68,19 +70,21 @@ async function addListeners(tabs) {
       console.log("starting drag");
     });
 
-    //add handling for if tab is first in list
-    // document
-    //   .getElementById(element.id + "up-button")
-    //   .addEventListener("click", () => {
-    //     chrome.tabs.move(element.id, { index: element.index - 1 });
-    //   });
+    document.getElementById(element.id + "dropzone").addEventListener("dragover", (e) => {
+      e.preventDefault();
+    })
 
-    // //Add handling for if tab is last in list
-    // document
-    //   .getElementById(element.id + "down-button")
-    //   .addEventListener("click", () => {
-    //     chrome.tabs.move(element.id, { index: element.index + 1 });
-    //   });
+    document.getElementById(element.id + "dropzone").addEventListener("dragenter", (e, element) => {
+      e.preventDefault();
+      console.log(e);
+      console.log("entered dropzone");
+
+    })
+
+    currentElement.addEventListener("drop", (e) => {
+      e.preventDefault();
+      console.log("dropped");
+    })
 
     document
       .getElementById(element.id + "close-button")
@@ -125,11 +129,11 @@ async function getTabGroup(elementId) {
 grabTabs();
 getTabGroups();
 
-// chrome.tabs.onUpdated.addListener((tab) => {
-//   console.log("noticed update");
-//   console.log(tab);
-//   grabTabs();
-// });
-chrome.tabs.onCreated.addListener(grabTabs);
-chrome.tabs.onRemoved.addListener(grabTabs);
-chrome.tabs.onMoved.addListener(grabTabs);
+chrome.tabs.onUpdated.addListener((tab) => {
+  console.log("noticed update");
+  console.log(tab);
+  grabTabs();
+});
+chrome.tabs.onCreated.addListener(() => {grabTabs();});
+chrome.tabs.onRemoved.addListener(() => {grabTabs();});
+chrome.tabs.onMoved.addListener(() => {grabTabs();});
