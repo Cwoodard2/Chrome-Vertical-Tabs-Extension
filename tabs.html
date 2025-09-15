@@ -3,14 +3,22 @@
     <link rel="stylesheet" href="tabs.css" />
   </head>
   <body>
-    <div>
+    <div id="tab-viewer">
       <div>
-        <ul id="pinned-sites"></ul>
+        <ul id="pinned-sites-list">
+          <li class="pinned-sites">Test 1</li>
+          <li class="pinned-sites">Test 1</li>
+          <li class="pinned-sites">Test 1</li>
+          <li class="pinned-sites">Test 1</li>
+          <button id="add-pinned-site">+</button>
+        </ul>
       </div>
-      <ul id="tab-group-list"></ul>
-      <div class="group-divider"></div>
-      <button id="add-tab-button">+ New Tab</button>
-      <ul id="tab-list"></ul>
+      <div id="main-tabs">
+        <ul id="tab-group-list"></ul>
+        <div class="group-divider"></div>
+        <button id="add-tab-button">+ New Tab</button>
+        <ul id="tab-list"></ul>
+      </div>
     </div>
     <script src="VerticalTabViewer.js" type="module"></script>
   </body>

@@ -34,6 +34,11 @@ button {
     border: none;
 }
 
+#add-tab-button {
+    width: 100%;
+    text-align: left;
+}
+
 button:hover {
     background-color: hsla(0, 0%, 83%, 20%);
 }
@@ -111,9 +116,12 @@ ul {
     border-radius: 10px;
 }
 
+/* change so that non color related items are in a separate class reserved for rtab group names*/
 .orange {
-    border: 5px solid orange;
+    border: 2px solid orange;
     border-radius: 10px;
+    padding: 5px;
+    background-color: rgba(255, 166, 0, 20%);
 }
 
 .group-divider {
@@ -159,4 +167,21 @@ ul {
 
 .dragging {
     opacity: 50%;
+}
+
+#tab-viewer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.pinned-sites {
+    border-radius: 15px;
+    background-color: white;
+    height: 50px;
+    width: 50px;
+}
+
+#main-tabs {
+    width: 80%;
 }

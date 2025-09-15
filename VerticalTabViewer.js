@@ -45,9 +45,15 @@ setTabs();
 chrome.tabs.onCreated.addListener(() => {
   grabTabs();
 });
+
 chrome.tabs.onRemoved.addListener(() => {
   grabTabs();
 });
+
 chrome.tabs.onMoved.addListener(() => {
   setTabs();
 });
+
+chrome.tabGroups.onUpdated.addEventListener(() => {
+  console.log("group created");
+})
