@@ -42,7 +42,8 @@ setTabs();
 //   console.log(tab);
 //   grabTabs();
 // });
-chrome.tabs.onCreated.addListener(() => {
+chrome.tabs.onCreated.addListener((event) => {
+  console.log(event)
   grabTabs();
 });
 
@@ -50,7 +51,9 @@ chrome.tabs.onRemoved.addListener(() => {
   grabTabs();
 });
 
-chrome.tabs.onMoved.addListener(() => {
+chrome.tabs.onMoved.addListener((tabId, eventInfo) => {
+  console.log(tabId);
+  console.log(eventInfo);
   setTabs();
 });
 
