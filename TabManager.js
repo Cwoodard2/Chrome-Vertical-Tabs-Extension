@@ -3,11 +3,13 @@ export function buildTabs(tabs) {
     .map((currentTab) => {
       const dropzoneId = currentTab.id + "dropzone";
       // console.log(currentTab);
-      return `<li><div id=${dropzoneId}>Dropzone</div><div draggable="true" id=${currentTab.id} class="tab">
+      return `<li><div id=${dropzoneId}>Dropzone</div><div draggable="true" id=${
+        currentTab.id
+      } class="tab">
       <div class="tab-content">
                 <img src=${
                   currentTab.favIconUrl
-                } style="width:24px;height:24px;"/>
+                } style="width:20px;height:20px;"/>
                 <p>${currentTab.title}</p>
                 </div>
                 <div class="button-div">
@@ -17,6 +19,13 @@ export function buildTabs(tabs) {
     })
     .join("");
   return tabList;
+}
+
+export function moveTab(sourceElement, targetElement) {
+  //TODO: remove tab from dom then move it adjacent to the tab that we want it at
+  //TODO: Add support for tab groups; JK it works automatically
+  sourceElement.parentNode.remove();
+  targetElement.insertAdjacentElement("beforebegin", sourceElement.parentNode);
 }
 
 export async function addListeners(tabs) {
@@ -42,48 +51,50 @@ export async function addListeners(tabs) {
       console.log("ending drag");
     });
 
-  
-      tabDropzone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        tabDropzone.classList.add("over"); //switchto event.target
-      });
+    tabDropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      tabDropzone.classList.add("over"); //switch to event.target
+    });
 
+    tabDropzone.addEventListener("dragenter", (e, element) => {
+      e.preventDefault();
+      console.log(element);
+      tabDropzone.classList.add("over"); //switch to event.target
+      console.log(e);
+      console.log("entered dropzone");
+    });
 
-          tabDropzone.addEventListener("dragenter", (e, element) => {
-        e.preventDefault();
-        console.log(element);
-        tabDropzone.classList.add("over"); //switchto event.target
-        console.log(e);
-        console.log("entered dropzone");
-      });
-
-      tabDropzone.addEventListener("dragleave", (event) => {
-        event.preventDefault();
-        console.log("left dropzone");
-        tabDropzone.classList.remove("over"); //switchto event.target
-      });
+    tabDropzone.addEventListener("dragleave", (event) => {
+      event.preventDefault();
+      console.log("left dropzone");
+      tabDropzone.classList.remove("over"); //switch to event.target
+    });
 
     tabDropzone.addEventListener("drop", async (event) => {
-      //TODO: Check if an element is in a tab group. If yes add source tab to tab group. Fix bug of tab groups duplicating
+      //TODO: Check if an element is in a tab group. If no add source tab to tab group. Fix bug of tab groups duplicating
       event.preventDefault();
       console.log("dropped");
       const dropElementId = parseInt(event.target.id.replace("dropzone", ""));
       try {
         const elementToSwap = document.querySelector(".dragging");
-      const sourceTab = await chrome.tabs.get(parseInt(elementToSwap.id));
-      const targetTab = await chrome.tabs.get(parseInt(event.target.id.replace("dropzone", "")));
-      console.log(sourceTab)
-      console.log(targetTab);
-      if (targetTab.groupId !== -1) {
-        await chrome.tabs.group({tabIds: sourceTab.id, groupId: targetTab.groupId});
-      } else if (targetTab.groupId === -1 && sourceTab.groupId !== -1) {
-        await chrome.tabs.ungroup(sourceTab.id);
-      }
-      await chrome.tabs.move(sourceTab.id, {index: targetTab.index});
-      // await chrome.tabs.move(dropElementId, {index: tabInformation.id});
-      elementToSwap.classList.remove("dragging");
-      tabDropzone.classList.remove("over");
-      console.log("dropped");
+        const targetElement = document.getElementById(event.target.id);
+        const sourceTab = await chrome.tabs.get(parseInt(elementToSwap.id));
+        const targetTab = await chrome.tabs.get(
+          parseInt(event.target.id.replace("dropzone", ""))
+        );
+        if (targetTab.groupId !== -1) {
+          await chrome.tabs.group({
+            tabIds: sourceTab.id,
+            groupId: targetTab.groupId,
+          });
+        } else if (targetTab.groupId === -1 && sourceTab.groupId !== -1) {
+          await chrome.tabs.ungroup(sourceTab.id);
+        }
+        await chrome.tabs.move(sourceTab.id, { index: targetTab.index });
+        elementToSwap.classList.remove("dragging");
+        tabDropzone.classList.remove("over");
+        console.log("dropped");
+        moveTab(elementToSwap, targetElement);
       } catch (err) {
         console.log(err);
       }

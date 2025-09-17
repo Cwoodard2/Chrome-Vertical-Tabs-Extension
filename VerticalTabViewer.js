@@ -23,12 +23,6 @@ document.getElementById("add-tab-button").addEventListener("click", () => {
   chrome.tabs.create({ index: 0 });
 });
 
-async function getTabGroup(elementId) {
-  const tabGroup = await chrome.tabGroups.get(elementId);
-  console.log(tabGroup);
-  return tabGroup.color;
-}
-
 function setTabs() {
   grabTabs();
   console.log("building tab groups");
@@ -52,11 +46,11 @@ chrome.tabs.onRemoved.addListener(() => {
 });
 
 chrome.tabs.onMoved.addListener((tabId, eventInfo) => {
-  console.log(tabId);
-  console.log(eventInfo);
-  setTabs();
+  // console.log(tabId);
+  // console.log(eventInfo);
+  // setTabs();
 });
 
-chrome.tabGroups.onUpdated.addEventListener(() => {
-  console.log("group created");
-})
+// chrome.tabGroups.onUpdated.addEventListener(() => {
+//   console.log("group created");
+// })

@@ -1,36 +1,36 @@
 import { buildTabs, addListeners } from "./TabManager.js";
 export async function getTabGroups() {
   //TODO: Create a dedicated function to building the tab groups
-  document.getElementById("tab-group-list").innerHTML = "";
   const tabGroups = await chrome.tabGroups.query({});
-  console.log(tabGroups);
-  let tabsInGroups = [];
-  let finalGroups;
-  tabGroups.forEach(async (element, index) => {
-    const title = element.title.replaceAll(" ", "");
-    const group = await chrome.tabs.query({ groupId: element.id });
-    let groupName = title + "-group";
-    finalGroups = `<li class="tab-group"><button id=${groupName}>${title}</button><ul id=${title} class="">${buildTabs(
-      group
+  tabGroups.forEach((tabGroup) => buildTabGroup(tabGroup));
+}
+
+async function buildTabGroup(tabGroup) {
+    const tabGroupTabs = await getTabGroup(tabGroup);
+    let tabGroupName = tabGroup.title.replaceAll(" ", "-") + "-toggle";
+    const builtTabGroup = `<li class="tab-group"><button id=${tabGroupName}>${tabGroup.title}</button><ul id=${tabGroup.id} class="">${buildTabs(
+      tabGroupTabs
     )}</ul></li>`;
 
     document
       .getElementById("tab-group-list")
-      .insertAdjacentHTML("beforeend", finalGroups);
+      .insertAdjacentHTML("beforeend", builtTabGroup);
 
-    document.getElementById(groupName).classList.add(element.color);
+    document.getElementById(tabGroupName).classList.add(tabGroup.color);
 
-    addGroupListeners(group, title);
-  });
+    addGroupListeners(tabGroupTabs, tabGroupName, tabGroup.id);
 }
 
-export function addGroupListeners(group, title) {
-  document.getElementById(title + "-group").addEventListener("click", () => {
-    const tabGroup = document.getElementById(title);
-    console.log(tabGroup);
-    console.log(tabGroup.classList.contains("hide-group"));
+async function getTabGroup(group) {
+  const tabGroup = await chrome.tabs.query({ groupId: group.id });
+  return tabGroup;
+}
+
+export function addGroupListeners(tabGroupTabs, tabGroupName, tabGroupId) {
+  document.getElementById(tabGroupName).addEventListener("click", () => {
+    const tabGroup = document.getElementById(tabGroupId);
     tabGroup.classList.toggle("hide-group");
   });
 
-  addListeners(group);
+  addListeners(tabGroupTabs);
 }
