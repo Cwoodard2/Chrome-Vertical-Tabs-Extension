@@ -42,6 +42,7 @@ chrome.tabs.onCreated.addListener((event) => {
 });
 
 chrome.tabs.onRemoved.addListener(() => {
+  //TODO: make a function that handles removing an element from the DOM
   grabTabs();
 });
 

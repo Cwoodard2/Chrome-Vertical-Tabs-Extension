@@ -22,8 +22,9 @@ export function buildTabs(tabs) {
 }
 
 export function moveTab(sourceElement, targetElement) {
-  //TODO: remove tab from dom then move it adjacent to the tab that we want it at
-  //TODO: Add support for tab groups; JK it works automatically
+  //TODO: remove tab from dom then move it adjacent to the tab that we want it at; Fix slowdowns that show up when moving tabs
+  //TODO: Add support for tab groups; JK it works automatically; Fix bug that causes elements to disappear
+  //TODO: Fix issue where tabs are not put in the correct spot in the DOM when put to the front of the list when not in a tab group
   sourceElement.parentNode.remove();
   targetElement.insertAdjacentElement("beforebegin", sourceElement.parentNode);
 }
