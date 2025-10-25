@@ -1,5 +1,5 @@
 //TODO: need a better global updating system for tabs so that I am not rerendering the whole list
-import { buildTabs, addListeners } from "./TabManager.js";
+import { buildTabs, buildTab, addListeners } from "./TabManager.js";
 import { getTabGroups } from "./TabGroupManager.js";
 
 export async function grabTabs() {
@@ -36,9 +36,9 @@ setTabs();
 //   console.log(tab);
 //   grabTabs();
 // });
-chrome.tabs.onCreated.addListener((event) => {
-  console.log(event)
-  grabTabs();
+chrome.tabs.onCreated.addListener((createdTab) => {
+  console.log(createdTab);
+  buildTab(createdTab);
 });
 
 chrome.tabs.onRemoved.addListener(() => {

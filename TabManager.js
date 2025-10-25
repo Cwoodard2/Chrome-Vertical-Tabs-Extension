@@ -21,6 +21,34 @@ export function buildTabs(tabs) {
   return tabList;
 }
 
+//TODO: use tab opener ID to determine where to place a tab if it is opened by another tab
+export function buildTab(tabData) {
+  console.log(tabData);
+  const dropzoneId = tabData.id + "dropzone";
+  const newTab = `<li><div id=${dropzoneId}>Dropzone</div><div draggable="true" id=${
+    tabData.id
+  } class="tab">
+      <div class="tab-content">
+                <img src=${
+                  tabData.favIconUrl
+                } style="width:20px;height:20px;"/>
+                <p>${tabData.title}</p>
+                </div>
+                <div class="button-div">
+                <button id=${tabData.id + "close-button"} >X</button>
+                </div>
+            </div></li>`;
+
+  if (tabData.groupId !== -1) {
+    const tabGroup = document.getElementById(tabData.groupId);
+
+  } 
+  console.log(newTab);
+  document.getElementById("tab-list").insertAdjacentHTML("beforeend", newTab);
+  //TODO: Add event listeners
+
+}
+
 export function moveTab(sourceElement, targetElement) {
   //TODO: remove tab from dom then move it adjacent to the tab that we want it at; Fix slowdowns that show up when moving tabs
   //TODO: Add support for tab groups; JK it works automatically; Fix bug that causes elements to disappear

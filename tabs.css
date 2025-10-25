@@ -1,187 +1,190 @@
 @media (prefers-color-scheme: light) {
-    body {
-        color: black;
-        background-color: beige;
-    }
+  body {
+    color: black;
+    background-color: beige;
+  }
 
-    .tab {
-        background-color: white;
-    }
+  .tab {
+    background-color: white;
+  }
 
-    button {
-        color: black;
-    }
+  button {
+    color: black;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-    body {
-        color: white;
-        background-color: darkgrey;
-    }
+  body {
+    color: white;
+    background-color: darkgrey;
+  }
 
-    .tab {
-        background-color: black;
-    }
+  .tab {
+    background-color: black;
+  }
 
-    button {
-        color: white;
-    }
+  button {
+    color: white;
+  }
 }
 
 button {
-    border-radius: 100px;
-    background: none;
-    border: none;
+  border-radius: 100px;
+  background: none;
+  border: none;
 }
 
 #add-tab-button {
-    width: 100%;
-    text-align: left;
+  width: 100%;
+  text-align: left;
 }
 
 button:hover {
-    background-color: hsla(0, 0%, 83%, 20%);
+  background-color: hsla(0, 0%, 83%, 20%);
 }
 
 .tab-content {
-display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tab {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    box-shadow: 0px 0px 2px 2px black;
-    border-radius: 6px;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  box-shadow: 0px 0px 2px 2px black;
+  border-radius: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 ul {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding-left: 0;
 }
 
 .active-tab {
-    background-color: grey;
+  background-color: grey;
 }
 
 .grey {
-     border: 5px solid grey;
-    border-radius: 10px;
+  border: 5px solid grey;
+  border-radius: 10px;
 }
 
 .blue {
-     border: 5px solid blue;
-    border-radius: 10px;
+  border: 5px solid blue;
+  border-radius: 10px;
 }
 
 .red {
-     border: 5px solid red;
-    border-radius: 10px;
+  border: 5px solid red;
+  border-radius: 10px;
 }
 
 .yellow {
-     border: 5px solid yellow;
-    border-radius: 10px;
+  border: 5px solid yellow;
+  border-radius: 10px;
 }
 
 .green {
-     border: 5px solid green;
-    border-radius: 10px;
+  border: 5px solid green;
+  border-radius: 10px;
 }
 
 .pink {
-     border: 5px solid pink;
-    border-radius: 10px;
+  border: 5px solid pink;
+  border-radius: 10px;
 }
 
 .purple {
-     border: 5px solid purple;
-    border-radius: 10px;
+  border: 5px solid purple;
+  border-radius: 10px;
 }
 
 .cyan {
-    border: 5px solid cyan;
-    border-radius: 10px;
+  border: 5px solid cyan;
+  border-radius: 10px;
 }
 
 /* change so that non color related items are in a separate class reserved for rtab group names*/
 .orange {
-    border: 2px solid orange;
-    border-radius: 10px;
-    padding: 5px;
-    background-color: rgba(255, 166, 0, 20%);
+  border: 2px solid orange;
+  border-radius: 10px;
+  padding: 5px;
+  background-color: rgba(255, 166, 0, 20%);
 }
 
 .group-divider {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: rgb(138, 15, 15);
-    height: 5px;
-    border-radius: 1000px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(138, 15, 15);
+  height: 5px;
+  border-radius: 1000px;
 }
 
 .tab-group {
-    margin-top: 10px;
-    padding: 10px;
+  margin-top: 10px;
+  padding: 10px;
 }
 
 .tab-title {
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 1000px;
-    border: 3px solid white;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 1000px;
+  border: 3px solid white;
 }
 
 .hide-group {
-    display: none;
+  display: none;
 }
 
 .active-tab {
-    background-color: grey;
+  background-color: grey;
 }
 
 .button-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    right: 0px;
-    background-color: inherit;
-    height: 100%;
-    padding-left: 5px;
-    padding-right: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;
+  background-color: inherit;
+  height: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .dragging {
-    opacity: 50%;
+  opacity: 50%;
 }
 
 #tab-viewer {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .pinned-sites {
-    border-radius: 15px;
-    background-color: white;
-    height: 50px;
-    width: 50px;
+  border-radius: 15px;
+  background-color: white;
+  height: 50px;
+  width: 50px;
 }
 
 #main-tabs {
-    width: 80%;
+  width: 80%;
 }
